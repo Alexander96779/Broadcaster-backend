@@ -1,0 +1,21 @@
+language: node_js
+node_js:
+  - "stable"
+cache:
+  directories:
+    - "node_modules"
+env:
+  global:
+  - NODE_ENV=test
+install:
+  - npm install
+services:
+  - postgresql
+before_script:
+  - psql -c 'create database broadcaster;' -U postgres
+  - psql -c "CREATE USER broadcaster WITH PASSWORD 'broadcaster123';" -U postgres
+  - npm install -g sequelize-cli
+script:
+  - npm run test
+after_success:
+  - npm run coveralls
