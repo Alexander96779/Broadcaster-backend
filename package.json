@@ -4,8 +4,18 @@
   "description": "Broadcaster enables any/every citizen to bring any form of corruption to the notice of appropriate authorities and the general public. Users can also report on things that need government intervention.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+    "start": "cross-env NODE_ENV=production npm run undo:db && cross-env NODE_ENV=production npm run migrate:db && cross-env NODE_ENV=production npm run seed:db && cross-env NODE_ENV=production npm run build && node dist/app.js",
+    "dev": "node_modules/.bin/nodemon ./src/app.js --exec babel-node --s",
+    "pre-test": "cross-env NODE_ENV=test npm run undo:db && cross-env NODE_ENV=test npm run migrate:db && cross-env NODE_ENV=test npm run seed:db",
+    "test": "npm run pre-test && cross-env NODE_ENV=test nyc --reporter=text --reporter=html mocha --timeout=10000 --require @babel/polyfill --require @babel/register --exit ./src/test/index.test.js",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "db:connect": "babel-node ./src/database/config",
+    "create:db": "cross-env NODE_ENV=development && node_modules/.bin/sequelize db:create",
+    "create:tables": "cross-env NODE_ENV=development && npm run migrate:db && npm run seed:db",
+    "drop:db": "cross-env NODE_ENV=development && node_modules/.bin/sequelize db:drop",
+    "migrate:db": "node_modules/.bin/sequelize db:migrate  ",
+    "seed:db": "node_modules/.bin/sequelize db:seed:all",
+    "undo:db": "node_modules/.bin/sequelize db:migrate:undo:all"
   },
   "repository": {
     "type": "git",
@@ -26,16 +36,21 @@
     "@babel/preset-env": "^7.9.6",
     "babel-plugin-add-module-exports": "^1.0.2",
     "coveralls": "^3.1.0",
+    "cross-env": "^7.0.2",
     "eslint": "^7.1.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-plugin-import": "^2.20.2",
+    "mocha": "^7.2.0",
     "nyc": "^15.0.1",
     "sequelize-migration-pg-extras": "^1.0.1"
   },
   "dependencies": {
     "@babel/register": "^7.9.0",
     "@babel/runtime": "^7.9.6",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "nodemon": "^2.0.4",
     "pg": "^8.2.1",
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.21.11",
