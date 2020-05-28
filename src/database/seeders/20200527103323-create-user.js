@@ -4,7 +4,7 @@ const { hashPassword } = hash;
 
 export default {
   up: async queryInterface => queryInterface.bulkInsert('Users', [{
-    email: 'niyialexp@gmail.com',
+    email: 'alexandre34@gmail.com',
     user_name: 'Alex',
     firstName: 'Alexandre',
     lastName: 'Niyigena',
