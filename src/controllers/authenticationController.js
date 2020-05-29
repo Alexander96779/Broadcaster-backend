@@ -6,7 +6,7 @@ import Response from '../utils/response';
 import DbErrorHandler from '../utils/dbErrorHandler';
 import UserRepository from '../repositories/userRepository';
 import Mailer from '../services/mail/Mailer';
-
+import UserServices from '../services/user.service';
 dotenv.config();
 
 const { User } = models;
@@ -79,5 +79,26 @@ export default class AuthenticationController {
            DbErrorHandler.handleSignupError(res, error);
        }
    }
+         /**
+   * @description This helps a the system to verify if user email exists
+   * @param  {object} req - The request object
+   * @param  {object} res - The response object
+   * @returns  {object} The response object
+   */
+
+    static async verifyUser(req, res) {
+        const {email} = jwt.verify(req.params.emailToken, process.env.KEY);
+        const token = req.params.emailToken;
+        const verify = true;
+        const verifyingUser = await UserServices.verifyingUser(email, verify, token);
+
+        if(verifyingUser.status == 200) {
+            const response = new Response(res, 200, verifyingUser.message, verifyingUser.data);
+            response.sendSuccessResponse();
+        } else {
+            const response = new Response(res, verifyingUser.status, verifyingUser.message);
+            response.sendErrorMessage;
+        }
+    }
 
 }
