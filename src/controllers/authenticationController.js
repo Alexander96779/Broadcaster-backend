@@ -4,13 +4,12 @@ import hash from '../utils/hash';
 import models from '../models';
 import Response from '../utils/response';
 import DbErrorHandler from '../utils/dbErrorHandler';
-import UserRepository from '../repositories/userRepository';
 import Mailer from '../services/mail/Mailer';
 import UserServices from '../services/user.service';
 dotenv.config();
 
 const { User } = models;
-const { hashPassword } = hash;
+const { hashPassword, decryptPassword } = hash;
 
 export default class AuthenticationController {
       /**
@@ -98,6 +97,45 @@ export default class AuthenticationController {
         } else {
             const response = new Response(res, verifyingUser.status, verifyingUser.message);
             response.sendErrorMessage;
+        }
+    }
+
+      /**
+   * @description This helps an existing user to login
+   * @param  {object} req - The request object
+   * @param  {object} res - The response object
+   * @returns  {object} The response object
+   */
+
+    static async loginUser(req, res) {
+        try {
+            const { email, password } = req.body;
+            const user = await User.findOne({
+                where: {
+                    email
+                }
+            });
+
+        if (!user) {
+            return res.status(404).json({ status: 404, message: 'Email or password does not exist'});
+        }
+        if (user.isVerified === false){
+            return res.status(401).json({ status: 401, message: 'Account not yet verified, Please verify your account first'});
+        }
+        const decryptedPassword = await decryptPassword(password, user.password);
+        if (!decryptedPassword) {
+            return res.status(403).json({ status: 403, message: 'Invalid Email or password'});
+        }
+        const newUser = {
+            id: user.id,
+            email: user.email,
+            role: user.role
+        };
+        const token = jwt.sign(newUser, process.env.KEY);
+        return res.status(200).json({ status: 200, message: `Hey ${user.user_name} you have successfully logged in`, data: { token} });
+
+        } catch (err) {
+            return res.status(500).json({ error: 'Internal Server Error', err });
         }
     }
 
