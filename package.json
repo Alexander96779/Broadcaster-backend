@@ -7,7 +7,7 @@
     "start": "cross-env NODE_ENV=production npm run undo:db && cross-env NODE_ENV=production npm run migrate:db && cross-env NODE_ENV=production npm run seed:db && cross-env NODE_ENV=production npm run build && node dist/app.js",
     "dev": "node_modules/.bin/nodemon ./src/app.js --exec babel-node --s",
     "pre-test": "cross-env NODE_ENV=test npm run undo:db && cross-env NODE_ENV=test npm run migrate:db && cross-env NODE_ENV=test npm run seed:db",
-    "test": "npm run pre-test && cross-env NODE_ENV=test nyc --reporter=text --reporter=html mocha --timeout=10000 --require @babel/polyfill --require @babel/register --exit ./src/test/index.test.js",
+    "test": "npm run pre-test && cross-env NODE_ENV=test nyc --reporter=text --reporter=html mocha --timeout=100000 --require @babel/polyfill --require @babel/register --exit ./src/test/index.test.js",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "db:connect": "babel-node ./src/database/config",
     "create:db": "cross-env NODE_ENV=development && node_modules/.bin/sequelize db:create",
