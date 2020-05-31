@@ -85,18 +85,18 @@ export default class AuthenticationController {
    * @returns  {object} The response object
    */
 
-    static async verifyUser(req, res) {
+    static async verifyingUsers(req, res) {
         const {email} = jwt.verify(req.params.emailToken, process.env.KEY);
         const token = req.params.emailToken;
         const verify = true;
-        const verifyingUser = await UserServices.verifyingUser(email, verify, token);
+        const verifyUser = await UserServices.verifyingUser(email, verify, token);
 
-        if(verifyingUser.status == 200) {
-            const response = new Response(res, 200, verifyingUser.message, verifyingUser.data);
+        if(verifyUser.status === 200) {
+            const response = new Response(res, 200, verifyUser.message, verifyUser.data);
             response.sendSuccessResponse();
         } else {
-            const response = new Response(res, verifyingUser.status, verifyingUser.message);
-            response.sendErrorMessage;
+            const response = new Response(res, verifyUser.status, verifyUser.message);
+            response.sendErrorMessage();
         }
     }
 
