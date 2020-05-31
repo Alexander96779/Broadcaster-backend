@@ -11,5 +11,6 @@ router.post('/signup', AuthMiddleware.signup, AuthenticationController.register)
 router.post('/verification/:emailToken', AuthenticationController.verifyingUsers);
 router.post('/login', LoginMiddleware.Validate, AuthenticationController.loginUser);
 router.post('/forgotPassword', validateEmail.forget, resetController.forgotPassword);
+router.patch('/resetPassword/:email/:password', validateEmail.reset, resetController.resetPassword);
 
 export default router;

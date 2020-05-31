@@ -14,7 +14,7 @@ before('Signup', (done) => {
     .send({
       userName: 'eric',
       password: 'Ericeric1',
-      email: 'eric.mico6@gmail.com'
+      email: 'patrickishimwe@gmail.com'
     })
     .end((err, res) => {
       if (err) {
