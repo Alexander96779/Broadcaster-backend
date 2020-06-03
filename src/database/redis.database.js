@@ -3,8 +3,6 @@ import redis from 'redis';
 
 dotenv.config();
 
-const REDIS_PORT = process.env.PORT || 6379;
-
-const redisClient = redis.createClient(REDIS_PORT);
+const redisClient = redis.createClient(process.env.REDIS_URL);
 
 export default redisClient;

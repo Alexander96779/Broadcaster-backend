@@ -7,6 +7,7 @@ import DbErrorHandler from '../utils/dbErrorHandler';
 import Mailer from '../services/mail/Mailer';
 import UserServices from '../services/user.service';
 import redisClient from '../database/redis.database';
+import UserRepository from '../repositories/userRepository';
 
 dotenv.config();
 
@@ -168,4 +169,35 @@ export default class AuthenticationController {
        }
    }
 
+     /**
+   * @description This helps a administrator to change users role
+   * @param  {object} req - The request object
+   * @param  {object} res - The response object
+   * @returns  {object} The response object
+   */
+
+  static async assignRole(req, res) {
+      const { email, role } = req.body;
+      try {
+          const user = await UserRepository.update({email}, {role});
+          if (user[0] === 0) {
+              const response = new Response(res, 404, 'User is not found');
+              return response.sendErrorMessage();
+          }
+          const newUser = {
+              email: user[1][0].email,
+              userName: user[1][0].user_name,
+              role: user[1][0].role
+          };
+          const response = new Response(
+              res,
+              200,
+              'User role updated successfully',
+              { user: newUser }
+          );
+          return response.sendSuccessResponse();
+      } catch (error) {
+          return DbErrorHandler.handleSignupError(res, error);
+      }
+  }
 }

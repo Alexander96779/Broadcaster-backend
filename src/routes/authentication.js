@@ -13,5 +13,6 @@ router.post('/login', LoginMiddleware.Validate, AuthenticationController.loginUs
 router.post('/forgotPassword', validateEmail.forget, resetController.forgotPassword);
 router.patch('/resetPassword/:email/:password', validateEmail.reset, resetController.resetPassword);
 router.get('/logout', AuthMiddleware.verifyToken, AuthenticationController.logout);
+router.patch('/changeRole', AuthMiddleware.verifyToken, AuthMiddleware.userRole, AuthenticationController.assignRole);
 
 export default router;
