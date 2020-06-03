@@ -4,6 +4,7 @@ import UserSchema from '../modules/userSchema';
 import validator from '../utils/validator';
 import AuthUtils from '../utils/auth.utils';
 import userRepository from '../repositories/userRepository';
+import redisClient from '../database/redis.database';
 
 const { trimmer } = validator;
 
@@ -20,7 +21,7 @@ class AuthMiddleware {
    */
   static async verifyToken(req, res, next) {
     try {
-      const token = (!req.headers.token) ? req.query.token.split(' ')[1] : req.headers.token.split(' ')[1];
+      const token = (!req.headers.token) ? req.query.token : req.headers.token;
       const payload = AuthUtils.jwtVerify(token);
       redisClient.get('token', (err, userToken) => {
         const user = userRepository.findByEmail(payload.email);

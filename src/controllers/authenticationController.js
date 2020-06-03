@@ -6,6 +6,8 @@ import Response from '../utils/response';
 import DbErrorHandler from '../utils/dbErrorHandler';
 import Mailer from '../services/mail/Mailer';
 import UserServices from '../services/user.service';
+import redisClient from '../database/redis.database';
+
 dotenv.config();
 
 const { User } = models;
@@ -138,5 +140,32 @@ export default class AuthenticationController {
             return res.status(500).json({ error: 'Internal Server Error', err });
         }
     }
+
+      /**
+   * @description contoller function that logs a user out
+   * @param {object} req - request object
+   * @param {object} res - response object
+   * @param {object} next - middleware object
+   * @returns {object} user - Logged in user
+   */
+
+   static async logout (req, res) {
+       try {
+           const token = req.headers.token || req.params.token;
+           if (!token) {
+            return res.status(403).json({
+                status: 403,
+                error: 'Provide token please!!',
+            });
+           }
+           redisClient.set('token', token);
+           return res.status(200).json({
+               status: 200,
+               message: 'You have logged out',
+           });
+       } catch (err) {
+        return res.status(500).json({ error: 'Internal Server Error', err });
+       }
+   }
 
 }
