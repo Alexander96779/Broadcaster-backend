@@ -13,10 +13,10 @@ services:
   - postgresql
   - redis-server
 before_script:
-  - psql -c 'create database broadcaster;' -U postgres
+  - psql -c 'create database test;' -U postgres
   - psql -c "CREATE USER broadcaster WITH PASSWORD 'broadcaster123';" -U postgres
   - npm install -g sequelize-cli
 script:
   - npm run test
-after_success:
+after_script:
   - npm run coveralls
