@@ -58,13 +58,13 @@ class UserSchema {
   */
   static profile(data) {
     const schema = Joi.object().keys({
-      first_name: Joi.string().min(3).max(30)
+      firstName: Joi.string().min(3).max(30)
         .messages({
           'string.base': 'firstName must be a string',
           'string.min': 'firstName length must be at least {{#limit}} characters long',
           'string.max': 'firstName length must be less than or equal to {{#limit}} characters long',
         }),
-      last_name: Joi.string().min(3).max(30)
+      lastName: Joi.string().min(3).max(30)
         .messages({
           'string.base': 'lastName must be a string',
           'string.min': 'lastName length must be at least {{#limit}} characters long',
@@ -96,13 +96,7 @@ class UserSchema {
           'string.base': 'address must be a string',
           'string.min': 'address length must be at least {{#limit}} characters long',
           'string.max': 'address length must be less than or equal to {{#limit}} characters long',
-        }),
-      prefered_language: Joi.string().min(3).max(30)
-        .messages({
-          'string.base': 'prefered_language must be a string',
-          'string.min': 'prefered_language length must be at least {{#limit}} characters long',
-          'string.max': 'prefered_language length must be less than or equal to {{#limit}} characters long',
-        }),
+        })
     });
     return schema.validate(data);
   }
