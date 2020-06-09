@@ -1,9 +1,11 @@
 import authentication from './routes/authentication';
 import profile from './routes/profile.route';
+import incident from './routes/incident.route';
 
 export default (app) => {
     app.use('/api/auth', authentication);
     app.use('/api/profile', profile);
+    app.use('/api/incident', incident);
 
     app.use((req, res, next) => {
         const err = new Error('Page not found');
