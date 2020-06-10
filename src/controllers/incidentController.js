@@ -127,6 +127,41 @@ class IncidentController {
       return DbErrorHandler.handleSignupError(res, error);
     }
    }
+
+     /**
+   * @description This helps to find incident by id
+   * @param  {object} req - The request object
+   * @param  {object} res - The response object
+   * @returns  {object} The response object
+   */
+
+    static async getOne(req, res) {
+      let incident;
+      let response;
+
+      try {
+        const { userData } = req;
+        const id =  parseInt(req.params.id);
+        const isAdmin = await AuthUtils.isAdmin(userData);
+        const isRequester = await AuthUtils.isRequester(userData);
+
+        if (isAdmin) {
+         incident = await IncidentService.retrieveOneIncident({ id });
+        }
+        if (isRequester) {
+          incident = await IncidentService.retrieveOneIncident({ user_id: userData.id, id});
+        }
+
+        if (!incident) {
+          response = new Response(res, 404, 'Sorry, Incident not found');
+          return response.sendErrorMessage();
+        }
+        response = new Response(res, 200, 'Found Incident', incident);
+        return response.sendSuccessResponse();
+      } catch (error) {
+        return DbErrorHandler.handleSignupError(res, error);
+      }
+    }
 }
 
 export default IncidentController;
