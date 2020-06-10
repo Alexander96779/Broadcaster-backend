@@ -5,24 +5,23 @@ import app from '../app';
 chai.use(chaiHttp);
 const { request } = chai;
 
+const user = {
+  userName: 'Eric',
+  password: 'Ericeric1234',
+  email: 'erickar@gmail.com'
+};
+
 let token1;
 
-before('Signup', (done) => {
+before((done) => {
   request(app)
     .post('/api/auth/signup')
     .set('Accept', 'application/json')
-    .send({
-      userName: 'eric',
-      password: 'Ericeric1',
-      email: 'patrickishimwe@gmail.com'
-    })
-    .end((err, res) => {
-      if (err) {
-        return done(err);
-      }
+    .send(user)
+    .end(async (err, res) => {
       const { token } = res.body.data;
       token1 = token;
-      return done();
+      done();
     });
 });
 

@@ -6,6 +6,8 @@ import IncidentMiddleware from '../middlewares/incident.middleware';
 
 const router = express.Router();
 const connection = connect();
+
 router.post('/create', AuthMiddleware.verifyToken, connection, IncidentMiddleware.validate, IncidentController.createIncident);
+router.get('/viewAll', AuthMiddleware.verifyToken, IncidentController.getAll);
 
 export default router;

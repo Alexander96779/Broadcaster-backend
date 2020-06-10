@@ -49,7 +49,7 @@ class AuthUtils {
   /**
    *
    * @param {obj} userData
-   * @returns {boolean} isManager is true if user is a manager
+   * @returns {boolean} isAdmin is true if user is an Administrator
    */
   static async isAdmin({ id }) {
     try {
@@ -63,7 +63,7 @@ class AuthUtils {
   /**
    *
    * @param {obj} userData
-   * @returns {boolean} isManager is true if user is a manager
+   * @returns {boolean} isRequester is true if user is a Requester
    */
   static async isRequester({ id }) {
     try {

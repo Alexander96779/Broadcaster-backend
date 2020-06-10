@@ -8,9 +8,9 @@ class IncidentService {
    * @param {*} offset
    * @returns {*} incidents
    */
-  static async retrieveAllIncidents(options, limit, offset) {
+  static async retrieveAllIncidents(options) {
     try {
-      const incidents = await IncidentRepository.findAll(options, limit, offset);
+      const incidents = await IncidentRepository.findAll(options);
 
       return incidents;
     } catch (error) {
