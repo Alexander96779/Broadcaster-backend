@@ -9,5 +9,6 @@ const connection = connect();
 
 router.post('/create', AuthMiddleware.verifyToken, connection, IncidentMiddleware.validate, IncidentController.createIncident);
 router.get('/viewAll', AuthMiddleware.verifyToken, IncidentController.getAll);
+router.delete('/:id/delete', IncidentMiddleware.param, AuthMiddleware.verifyToken, IncidentController.removeIncident);
 
 export default router;
