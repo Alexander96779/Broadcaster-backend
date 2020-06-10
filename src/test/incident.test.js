@@ -142,6 +142,61 @@ before((done) => {
           });
         });
 
+        // FIND SPECIFIC INCIDENT TESTS
+        it('Should find incident if the user created it', (done) => {
+          request(app)
+            .get('/api/incident/2')
+            .set('Accept', 'application/json')
+            .set('token', `${token1}`)
+            .then(res => {
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.an('object');
+              expect(res.body).to.have.a.property('message');
+              expect(res.body).to.have.a.property('data');
+              return done();
+            });
+          });
+
+          it('Should not find specific incident if not found', (done) => {
+            request(app)
+              .get('/api/incident/10')
+              .set('Accept', 'application/json')
+              .set('token', `${token1}`)
+              .then(res => {
+                expect(res).to.have.status(404);
+                expect(res.body).to.be.an('object');
+                expect(res.body).to.have.a.property('error');
+                return done();
+              });
+            });
+
+            it('Should not find specific incident if not created by', (done) => {
+              request(app)
+                .get('/api/incident/1')
+                .set('Accept', 'application/json')
+                .set('token', `${token3}`)
+                .then(res => {
+                  expect(res).to.have.status(404);
+                  expect(res.body).to.be.an('object');
+                  expect(res.body).to.have.a.property('error');
+                  return done();
+                });
+              });
+
+              it('Should find incident if Administrator', (done) => {
+                request(app)
+                  .get('/api/incident/3')
+                  .set('Accept', 'application/json')
+                  .set('token', `${token2}`)
+                  .then(res => {
+                    expect(res).to.have.status(200);
+                    expect(res.body).to.be.an('object');
+                    expect(res.body).to.have.a.property('message');
+                    expect(res.body).to.have.a.property('data');
+                    return done();
+                  });
+                });
+
         // DELETE INCIDENTS TESTS
         it('Should delete incident if the user created it', (done) => {
           request(app)

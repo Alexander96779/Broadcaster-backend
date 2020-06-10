@@ -51,7 +51,7 @@ export default (sequelize, DataTypes) => {
       isApproved: {
         allowNull: true,
         type: DataTypes.BOOLEAN,
-        defaultValue: true
+        defaultValue: false
       },
       status: {
         type: DataTypes.STRING,
