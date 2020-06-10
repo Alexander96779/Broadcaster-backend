@@ -113,6 +113,8 @@ before((done) => {
         return done();
       });
   });
+  
+  // VIEW ALL INCIDENTS TESTS
 
   it('Should return all incidents that belong to user', (done) => {
     request(app)
@@ -139,6 +141,59 @@ before((done) => {
             return done();
           });
         });
+
+        // DELETE INCIDENTS TESTS
+        it('Should delete incident if the user created it', (done) => {
+          request(app)
+            .delete('/api/incident/2/delete')
+            .set('Accept', 'application/json')
+            .set('token', `${token1}`)
+            .then(res => {
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.an('object');
+              expect(res.body).to.have.a.property('message');
+              return done();
+            });
+          });
+
+          it('Should not delete if not found', (done) => {
+            request(app)
+              .delete('/api/incident/10/delete')
+              .set('Accept', 'application/json')
+              .set('token', `${token1}`)
+              .then(res => {
+                expect(res).to.have.status(404);
+                expect(res.body).to.be.an('object');
+                expect(res.body).to.have.a.property('error');
+                return done();
+              });
+            });
+
+            it('Should not delete if not created by', (done) => {
+              request(app)
+                .delete('/api/incident/1/delete')
+                .set('Accept', 'application/json')
+                .set('token', `${token3}`)
+                .then(res => {
+                  expect(res).to.have.status(401);
+                  expect(res.body).to.be.an('object');
+                  expect(res.body).to.have.a.property('error');
+                  return done();
+                });
+              });
+
+          it('Should delete incident if Administrator', (done) => {
+            request(app)
+              .delete('/api/incident/3/delete')
+              .set('Accept', 'application/json')
+              .set('token', `${token2}`)
+              .then(res => {
+                expect(res).to.have.status(200);
+                expect(res.body).to.be.an('object');
+                expect(res.body).to.have.a.property('message');
+                return done();
+              });
+            });
 
 describe('Admin incident tests', () => {
     it('Should return all incidents', (done) => {

@@ -16,6 +16,15 @@ export default {
     body: 'Dear Government, We would like you to intervene in a domestic violence case against Marie Uwamahoro here in Musanze',
     category: 'Intervention',
     status: 'Approved'
+  },
+  {
+    user_id: 2,
+    user_FirstName: 'Tresor',
+    user_LastName: 'Cyubahiro',
+    title: 'Mituelle fund raising',
+    body: 'Dear Government, In nyamabuye sector we wanted to doa fund raising for 200 hundred families and provide mituelle cards for them',
+    category: 'Intervention',
+    status: 'Pending'
   }], {}),
   down: queryInterface => queryInterface.bulkDelete('Incidents', null, {})
 };

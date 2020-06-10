@@ -148,6 +148,21 @@ class IncidentRepository {
       throw new Error(error);
     }
   }
+
+    /**
+   * Gets comment by id.
+   * @param {object} id .
+   * @returns {object} delete object.
+   */
+  static async deleteIncident(id) {
+    try {
+      return await Incident.destroy({
+        where: [{ id }]
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }
 
 export default IncidentRepository;

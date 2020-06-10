@@ -86,6 +86,47 @@ class IncidentController {
            return DbErrorHandler.handleSignupError(res, error);
        }
    }
+
+     /**
+   * @description This helps user to delete unwanted incident
+   * @param  {object} req - The request object
+   * @param  {object} res - The response object
+   * @returns  {object} The response object
+   */
+
+   static async removeIncident(req, res) {
+    try {
+      const { userData } = req;
+      const isAdmin = await AuthUtils.isAdmin(userData);
+      const isRequester = await AuthUtils.isRequester(userData);
+      const id = parseInt(req.params.id);
+      if (isAdmin) {
+        const incident = await IncidentService.retrieveOneIncident({ id });
+        if (!incident) {
+          return onError(res, 404, 'Sorry, Incident not found');
+        }
+        const result = await IncidentRepository.deleteIncident(id);
+        if (result) {
+          return onSuccess(res, 200, 'Incident sucessfully deleted');
+        }
+      }
+      if (isRequester) {
+        const incident = await IncidentService.retrieveOneIncident({ id });
+        if (!incident) {
+          return onError(res, 404, 'Sorry, Incident not found');
+        }
+        if (incident.user_id !== userData.id) {
+          return onError(res, 401, 'This incident does not belong to you ');
+        }
+        const result = await IncidentRepository.deleteIncident(id);
+        if (result) {
+          return onSuccess(res, 200, 'Incident sucessfully deleted');
+        }
+      }
+    } catch (error) {
+      return DbErrorHandler.handleSignupError(res, error);
+    }
+   }
 }
 
 export default IncidentController;
