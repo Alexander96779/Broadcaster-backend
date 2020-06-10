@@ -9,34 +9,6 @@ class IncidentSchema {
    * @param {obj} data
    * @returns {obj} returns schema object
   */
-  static incidentSchema(data) {
-    const schema = Joi.object().keys({
-      title: Joi.string().min(5).max(50)
-        .messages({
-          'string.base': 'Title must be a string',
-          'string.min': 'Title length must be at least {{#limit}} characters long',
-          'string.max': 'Title length must be less than or equal to {{#limit}} characters long',
-        }),
-      body: Joi.string().min(10).max(255)
-        .messages({
-          'string.base': 'Body must be a string',
-          'string.min': 'Body length must be at least {{#limit}} characters long',
-          'string.max': 'Body length must be less than or equal to {{#limit}} characters long',
-        }),
-      category: Joi.string().regex(/^(Red flag|Intervention|RED FLAG|INTERVENTION|red flag|intervention)$/)
-        .messages({
-          'string.base': 'category must be a string',
-          'string.pattern.base': 'category must be Red flag|Intervention|RED FLAG|INTERVENTION|red flag|intervention',
-        })
-    });
-    return schema.validate(data);
-  }
-
-  /**
-   * @static
-   * @param {obj} data
-   * @returns {obj} returns schema object
-  */
   static updateSchema(data) {
     const schema = Joi.object().keys({
       title: Joi.string().min(5).max(50)

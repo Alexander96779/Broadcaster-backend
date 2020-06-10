@@ -101,13 +101,6 @@ class AuthMiddleware {
     }
   }
 
-  static async rememberMe(req) {
-    const check = req.body.rememberMe;
-    if (check === true) userRepository.update({ id: req.userData.id }, { rememberMe: true });
-    if (check === false) {
-      return userRepository.update({ id: req.userData.id }, { rememberMe: false });
-    }
-  }
 
   /**
    * @description This helps validate if user is a super admin

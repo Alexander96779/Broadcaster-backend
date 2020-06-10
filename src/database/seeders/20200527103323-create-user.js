@@ -30,7 +30,16 @@ export default {
   password: await hashPassword('Esperance12'),
   isVerified: true
 },
-  ], {}),
+{
+  email: 'borarehema@gmail.com',
+  user_name: 'Bora',
+  firstName: 'Rehema',
+  lastName: 'Bora',
+  role: 'requester',
+  password: await hashPassword('rehema123'),
+  isVerified: true
+},
+], {}),
 
   down: queryInterface => queryInterface.bulkDelete('Users', null, {})
 };

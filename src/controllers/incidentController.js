@@ -5,6 +5,7 @@ import Response, { onError, onSuccess } from '../utils/response';
 import IncidentRepository from '../repositories/incidentRepository';
 import IncidentService from '../services/incident.service';
 import ImageUploader from '../utils/imageUploader.util';
+import AuthUtils from '../utils/auth.utils';
 
 dotenv.config();
 
@@ -53,6 +54,38 @@ class IncidentController {
           return DbErrorHandler.handleSignupError(res, error);
         }
 }
+
+  /**
+   * @description This helps to find all incidents
+   * @param  {object} req - The request object
+   * @param  {object} res - The response object
+   * @returns  {object} The response object
+   */
+
+   static async getAll(req, res) {
+       let incidents;
+       let response;
+       try {
+           const { userData } = req;
+           const isAdmin = await AuthUtils.isAdmin(userData);
+           const isRequester = await AuthUtils.isRequester(userData);
+           if (isAdmin) {
+               incidents = await IncidentService.retrieveAllIncidents({});
+           }
+           if (isRequester) {
+               incidents = await IncidentService
+               .retrieveAllIncidents({ user_id: userData.id });
+           }
+            if (incidents.length === 0) {
+                response = new Response(res, 404, 'Sorry, No incidents created yet');
+                return response.sendErrorMessage();
+            }
+            response = new Response(res, 200, 'All incidents', incidents);
+            return response.sendSuccessResponse();
+       } catch (error) {
+           return DbErrorHandler.handleSignupError(res, error);
+       }
+   }
 }
 
 export default IncidentController;

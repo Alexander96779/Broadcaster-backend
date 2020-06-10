@@ -13,10 +13,10 @@ class IncidentRepository {
    * @param {*} offset
    * @returns {*} requests
    */
-  static async findAll(options = {}, limit, offset) {
+  static async findAll(options = {}) {
     try {
       const incidents = await Incident.findAll({
-        where: options, limit: limit || null, offset: offset || 0, order: [['createdAt', 'DESC']]
+        where: options, order: [['createdAt', 'DESC']]
       });
       return incidents;
     } catch (error) {
