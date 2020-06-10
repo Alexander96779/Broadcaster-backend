@@ -197,6 +197,48 @@ before((done) => {
                   });
                 });
 
+                    // FIND INCIDENTS BY STATUS
+            it('Should find incident if the user created it', (done) => {
+              request(app)
+                .get('/api/incident/status/approved')
+                .set('Accept', 'application/json')
+                .set('token', `${token1}`)
+                .then(res => {
+                  expect(res).to.have.status(200);
+                  expect(res.body).to.be.an('object');
+                  expect(res.body).to.have.a.property('message');
+                  expect(res.body).to.have.a.property('data');
+                  return done();
+                });
+              });
+    
+              it('Should not find incident if not found', (done) => {
+                request(app)
+                  .get('/api/incident/status/rejected')
+                  .set('Accept', 'application/json')
+                  .set('token', `${token1}`)
+                  .then(res => {
+                    expect(res).to.have.status(404);
+                    expect(res.body).to.be.an('object');
+                    expect(res.body).to.have.a.property('error');
+                    return done();
+                  });
+                });
+  
+                  it('Should find incident if Administrator', (done) => {
+                    request(app)
+                      .get('/api/incident/status/Pending')
+                      .set('Accept', 'application/json')
+                      .set('token', `${token2}`)
+                      .then(res => {
+                        expect(res).to.have.status(200);
+                        expect(res.body).to.be.an('object');
+                        expect(res.body).to.have.a.property('message');
+                        expect(res.body).to.have.a.property('data');
+                        return done();
+                      });
+                    });
+
         // DELETE INCIDENTS TESTS
         it('Should delete incident if the user created it', (done) => {
           request(app)

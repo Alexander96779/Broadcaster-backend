@@ -162,6 +162,43 @@ class IncidentController {
         return DbErrorHandler.handleSignupError(res, error);
       }
     }
+
+      /**
+   * @description This helps to find all pending requests
+   * @param  {object} req - The request object
+   * @param  {object} res - The response object
+   * @returns  {object} The response object
+   */
+      static async getByStatus(req, res) {
+        let incidents;
+        let response;
+
+        try {
+          const { userData } = req;
+          const { value } =req.params;
+          const status = value.charAt(0).toUpperCase() + value.slice(1);
+
+          const isAdmin = await AuthUtils.isAdmin(userData);
+          const isRequester = await AuthUtils.isRequester(userData);
+           
+          if (isAdmin) {
+            incidents = await IncidentService.retrieveAllIncidents({ status });
+          }
+
+          if (isRequester) {
+            incidents =await IncidentService.
+            retrieveAllIncidents({ user_id: userData.id, status});
+          }
+          if (incidents.length === 0) {
+            response = new Response(res, 404, `Sorry, there are no ${status} incidents found`);
+            return response.sendErrorMessage();
+          }
+          response = new Response(res, 200, `All ${status} incidents`, incidents);
+          return response.sendSuccessResponse();
+        } catch (error) {
+          return DbErrorHandler.handleSignupError(res, error);
+        }
+      }
 }
 
 export default IncidentController;
