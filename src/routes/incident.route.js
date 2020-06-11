@@ -10,8 +10,9 @@ const connection = connect();
 router.post('/create', AuthMiddleware.verifyToken, connection, IncidentMiddleware.validate, IncidentController.createIncident);
 router.get('/viewAll', AuthMiddleware.verifyToken, IncidentController.getAll);
 router.delete('/:id/delete', IncidentMiddleware.param, AuthMiddleware.verifyToken, IncidentController.removeIncident);
-router.get('/:id', AuthMiddleware.verifyToken, IncidentController.getOne);
+router.get('/:id', IncidentMiddleware.param, AuthMiddleware.verifyToken, IncidentController.getOne);
 router.get('/status/:value', AuthMiddleware.verifyToken, IncidentController.getByStatus);
+router.patch('/:id/approve', IncidentMiddleware.param, AuthMiddleware.verifyToken, IncidentController.approve);
 
 
 export default router;

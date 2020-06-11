@@ -187,7 +187,7 @@ class IncidentController {
 
           if (isRequester) {
             incidents =await IncidentService.
-            retrieveAllIncidents({ user_id: userData.id, status});
+            retrieveAllIncidents({ user_id: userData.id, status });
           }
           if (incidents.length === 0) {
             response = new Response(res, 404, `Sorry, there are no ${status} incidents found`);
@@ -199,6 +199,42 @@ class IncidentController {
           return DbErrorHandler.handleSignupError(res, error);
         }
       }
+
+        /**
+   * @description This helps the system admin to approve an incident
+   * @param  {object} req - The request object
+   * @param  {object} res - The response object
+   * @returns  {object} The response object
+   */
+          static async approve(req, res) {
+            let incident;
+            let response;
+            try {
+              const { userData } = req;
+              const id = parseInt(req.params.id);
+              const isAdmin = await AuthUtils.isAdmin(userData);
+
+              if (isAdmin) {
+                incident = await IncidentService.retrieveOneIncident({ id });
+                if (!incident) {
+                  response = new Response(res, 404, 'Sorry, Incident not found');
+                  return response.sendErrorMessage();
+                }
+                if (incident.status === 'Approved') {
+                  response = new Response(res, 400, 'Incident is already approved');
+                  return response.sendErrorMessage();
+                }
+                const approvedIncident = await IncidentService.approveIncident(id);
+                response = new Response(res, 200, 
+                  'Incident is sucessfully approved', approvedIncident[1]);
+                return response.sendSuccessResponse();
+              }
+              response = new Response(res, 401, 'Unauthorized access');
+              return response.sendErrorMessage();
+            } catch (error) {
+              return DbErrorHandler.handleSignupError(res, error);
+            }
+          }
 }
 
 export default IncidentController;

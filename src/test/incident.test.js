@@ -239,6 +239,58 @@ before((done) => {
                       });
                     });
 
+        //ADMIN APPROVE INCIDENT TESTS
+        it('Should approve incident, if Administrator and found', (done) => {
+          request(app)
+            .patch('/api/incident/1/approve')
+            .set('Accept', 'application/json')
+            .set('token', `${token2}`)
+            .then(res => {
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.an('object');
+              expect(res.body).to.have.a.property('message');
+              expect(res.body).to.have.a.property('data');
+              return done();
+            });
+          });
+
+          it('Should not approve incident, if not found', (done) => {
+            request(app)
+              .patch('/api/incident/100/approve')
+              .set('Accept', 'application/json')
+              .set('token', `${token2}`)
+              .then(res => {
+                expect(res).to.have.status(404);
+                expect(res.body).to.be.an('object');
+                expect(res.body).to.have.a.property('error');
+                return done();
+              });
+            });
+            it('Should not approve incident, if approved already', (done) => {
+              request(app)
+                .patch('/api/incident/2/approve')
+                .set('Accept', 'application/json')
+                .set('token', `${token2}`)
+                .then(res => {
+                  expect(res).to.have.status(400);
+                  expect(res.body).to.be.an('object');
+                  expect(res.body).to.have.a.property('error');
+                  return done();
+                });
+              });
+              it('Should not approve incident, if not administrator', (done) => {
+                request(app)
+                  .patch('/api/incident/3/approve')
+                  .set('Accept', 'application/json')
+                  .set('token', `${token3}`)
+                  .then(res => {
+                    expect(res).to.have.status(401);
+                    expect(res.body).to.be.an('object');
+                    expect(res.body).to.have.a.property('error');
+                    return done();
+                  });
+                });
+
         // DELETE INCIDENTS TESTS
         it('Should delete incident if the user created it', (done) => {
           request(app)
