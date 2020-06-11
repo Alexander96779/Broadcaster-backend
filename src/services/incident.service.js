@@ -40,7 +40,7 @@ class IncidentService {
    */
   static async approveIncident(id) {
     try {
-      const incident = await IncidentRepository.update({ id }, { status: 'Approved' });
+      const incident = await IncidentRepository.update({ id }, { status: 'Approved', isApproved: true });
 
       return incident;
     } catch (error) {
