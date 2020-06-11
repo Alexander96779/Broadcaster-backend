@@ -53,7 +53,7 @@ class IncidentService {
    * @param {*} id
    * @returns {*} incident
    */
-  static async rejectIncident() {
+  static async rejectIncident(id) {
     try {
         const incident = await IncidentRepository.update({ id }, { status: 'Rejected'});
 
