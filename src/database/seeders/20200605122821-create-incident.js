@@ -25,6 +25,15 @@ export default {
     body: 'Dear Government, In nyamabuye sector we wanted to doa fund raising for 200 hundred families and provide mituelle cards for them',
     category: 'Intervention',
     status: 'Pending'
+  },
+  {
+    user_id: 3,
+    user_FirstName: 'Bora',
+    user_LastName: 'Rehema',
+    title: 'Info Technology',
+    body: 'Dear Government, as tech is evolving the young generation of Mutiba are in need of being a part of it. Please help provide them with Computers',
+    category: 'Red flag',
+    status: 'Pending'
   }], {}),
   down: queryInterface => queryInterface.bulkDelete('Incidents', null, {})
 };

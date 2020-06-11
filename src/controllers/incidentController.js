@@ -235,6 +235,42 @@ class IncidentController {
               return DbErrorHandler.handleSignupError(res, error);
             }
           }
+
+                  /**
+   * @description This helps the system admin to approve an incident
+   * @param  {object} req - The request object
+   * @param  {object} res - The response object
+   * @returns  {object} The response object
+   */
+  static async reject(req, res) {
+    let incident;
+    let response;
+    try {
+      const { userData } = req;
+      const id = parseInt(req.params.id);
+      const isAdmin = await AuthUtils.isAdmin(userData);
+
+      if (isAdmin) {
+        incident = await IncidentService.retrieveOneIncident({ id });
+        if (!incident) {
+          response = new Response(res, 404, 'Sorry, Incident not found');
+          return response.sendErrorMessage();
+        }
+        if (incident.status === 'Rejected') {
+          response = new Response(res, 400, 'Incident is already rejected');
+          return response.sendErrorMessage();
+        }
+        const rejectedIncident = await IncidentService.rejectIncident(id);
+        response = new Response(res, 200, 
+          'Incident is sucessfully approved', rejectedIncident[1]);
+        return response.sendSuccessResponse();
+      }
+      response = new Response(res, 401, 'Unauthorized access');
+      return response.sendErrorMessage();
+    } catch (error) {
+      return DbErrorHandler.handleSignupError(res, error);
+    }
+  }
 }
 
 export default IncidentController;

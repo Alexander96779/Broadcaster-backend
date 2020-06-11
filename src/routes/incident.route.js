@@ -13,6 +13,7 @@ router.delete('/:id/delete', IncidentMiddleware.param, AuthMiddleware.verifyToke
 router.get('/:id', IncidentMiddleware.param, AuthMiddleware.verifyToken, IncidentController.getOne);
 router.get('/status/:value', AuthMiddleware.verifyToken, IncidentController.getByStatus);
 router.patch('/:id/approve', IncidentMiddleware.param, AuthMiddleware.verifyToken, IncidentController.approve);
+router.patch('/:id/reject', IncidentMiddleware.param, AuthMiddleware.verifyToken, IncidentController.reject);
 
 
 export default router;
