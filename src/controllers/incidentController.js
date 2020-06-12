@@ -271,6 +271,59 @@ class IncidentController {
       return DbErrorHandler.handleSignupError(res, error);
     }
   }
+
+    /**
+   * @description This methods allows users to edit incidents
+   * @param  {object} req - The request object
+   * @param  {object} res - The response object
+   * @returns  {object} The response object
+   */
+        static async editIncident(req, res) {
+          let incident;
+          let response;
+          try {
+            const { incidentData, userData } = req;
+            const id = parseInt(req.params.id);
+            const isRequester = await AuthUtils.isRequester(userData);
+
+            if (isRequester) {
+              incident = await IncidentService.retrieveOneIncident({ id });
+              if (!incident) {
+                response = new Response(res, 404, 'Sorry, Incident not found');
+                return response.sendErrorMessage();
+              }
+              if (incident.user_id !== userData.id) {
+                return onError(res, 401, 'This incident does not belong to you ');
+              }
+              if (incident.status === 'Pending') {
+                if (req.files && req.files.image) {
+                  const images = Array.isArray(req.files.image) ? req.files.image : [req.files.image];
+                  // uploading image to cloudinary
+                  const imageUrl = await ImageUploader.uploadImage(images);
+                  if(!imageUrl) {
+                      response = new Response(res, 415, 'Please upload valid image');
+                      return response.sendErrorMessage();
+                  }
+                  incidentData.image_url = imageUrl[0];
+              }
+              await IncidentRepository.update({ id: id }, incidentData);
+              response = new Response(res, 200, 
+                  'Incident is sucessfully updated', incidentData);
+                return response.sendSuccessResponse();
+              }
+              return res.status(412).json({
+                status: 412,
+                error: 'Precondition failed',
+              });
+            }
+            return res.status(403).json({
+              status: 403,
+              error: 'Forbidden route!!',
+            });
+          } catch (error) {
+            return DbErrorHandler.handleSignupError(res, error);
+          }
+        }
 }
 
 export default IncidentController;

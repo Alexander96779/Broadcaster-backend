@@ -342,7 +342,127 @@ before((done) => {
                             return done();
                           });
                         });
+                
+        // UPDATE OR EDIT INCIDENT TESTS
+        it('Should update incident if created by', (done) => {
+          request(app)
+            .patch('/api/incident/3/edit')
+            .set('Accept', 'application/json')
+            .set('token', `${token1}`)
+            .attach('image', 'src/test/assets/image1.jpg', 'image1.jpg')
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.an('object');
+              expect(res.body).to.have.a.property('data');
+              return done();
+            });
+        });
 
+        it('Should not update incident if not found', (done) => {
+          request(app)
+            .patch('/api/incident/20/edit')
+            .set('Accept', 'application/json')
+            .set('token', `${token1}`)
+            .attach('image', 'src/test/assets/image1.jpg', 'image1.jpg')
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              expect(res).to.have.status(404);
+              expect(res.body).to.be.an('object');
+              expect(res.body).to.have.a.property('error');
+              return done();
+            });
+        });
+
+        it('Should not update incident if not created by', (done) => {
+          request(app)
+            .patch('/api/incident/1/edit')
+            .set('Accept', 'application/json')
+            .set('token', `${token1}`)
+            .attach('image', 'src/test/assets/image1.jpg', 'image1.jpg')
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              expect(res).to.have.status(401);
+              expect(res.body).to.be.an('object');
+              expect(res.body).to.have.a.property('error');
+              return done();
+            });
+        });
+
+        it('Should not update incident if approved or rejected already', (done) => {
+          request(app)
+            .patch('/api/incident/2/edit')
+            .set('Accept', 'application/json')
+            .set('token', `${token1}`)
+            .field('title', 'Mituelle')
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              expect(res).to.have.status(412);
+              expect(res.body).to.be.an('object');
+              expect(res.body).to.have.a.property('error');
+              return done();
+            });
+        });
+
+        it('Should not update incident if not a Requester', (done) => {
+          request(app)
+            .patch('/api/incident/1/edit')
+            .set('Accept', 'application/json')
+            .set('token', `${token2}`)
+            .attach('image', 'src/test/assets/image1.jpg', 'image1.jpg')
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              expect(res).to.have.status(403);
+              expect(res.body).to.be.an('object');
+              expect(res.body).to.have.a.property('error');
+              return done();
+            });
+        });
+
+        it('Should not update incident if image format is invalid', (done) => {
+          request(app)
+            .patch('/api/incident/3/edit')
+            .set('Accept', 'application/json')
+            .set('token', `${token1}`)
+            .field('body', 'jkds zcljds,cdgekwrjsakdgkjjfdhkghhf')
+            .attach('image', 'src/test/assets/invalid.pdf', 'invalid.pdf')
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              expect(res).to.have.status(415);
+              expect(res.body).to.be.an('object');
+              expect(res.body).to.have.a.property('error');
+              return done();
+            });
+        });
+
+        it('Should not update incident for invalid inputs', (done) => {
+          request(app)
+            .patch('/api/incident/3/edit')
+            .set('Accept', 'application/json')
+            .set('token', `${token1}`)
+            .field('category', 'Kalamadjongo')
+            .end((err, res) => {
+              if (err) {
+                return done(err);
+              }
+              expect(res).to.have.status(422);
+              expect(res.body).to.be.an('object');
+              expect(res.body).to.have.a.property('error');
+              return done();
+            });
+        });
         // DELETE INCIDENTS TESTS
         it('Should delete incident if the user created it', (done) => {
           request(app)
