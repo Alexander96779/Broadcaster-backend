@@ -14,6 +14,7 @@ router.get('/:id', IncidentMiddleware.param, AuthMiddleware.verifyToken, Inciden
 router.get('/status/:value', AuthMiddleware.verifyToken, IncidentController.getByStatus);
 router.patch('/:id/approve', IncidentMiddleware.param, AuthMiddleware.verifyToken, IncidentController.approve);
 router.patch('/:id/reject', IncidentMiddleware.param, AuthMiddleware.verifyToken, IncidentController.reject);
+router.patch('/:id/edit', IncidentMiddleware.param, AuthMiddleware.verifyToken, connection, IncidentMiddleware.validate, IncidentController.editIncident);
 
 
 export default router;

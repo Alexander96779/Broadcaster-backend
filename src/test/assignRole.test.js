@@ -70,7 +70,7 @@ it('Should return object with new role', (done) => {
       `${token1}`
     )
     .send({
-      email: 'tresorc@gmail.com',
+      email: 'anaisecyu@gmail.com',
       role: 'administrator'
     })
     .end((err, res) => {

@@ -96,9 +96,10 @@ class IncidentRepository {
 
   static async update(field, changes) {
     try {
-      const record = await Incident.update(changes, { returning: true, plain: true, where: field });
-
-      return record;
+      return await Incident.update(changes, {
+        returning: true,
+        where: field
+      });
     } catch (e) {
       throw new Error(e);
     }
