@@ -4,7 +4,7 @@
   "description": "Broadcaster enables any/every citizen to bring any form of corruption to the notice of appropriate authorities and the general public. Users can also report on things that need government intervention.",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production npm run undo:db && cross-env NODE_ENV=production npm run migrate:db && cross-env NODE_ENV=production npm run seed:db && cross-env NODE_ENV=production npm run build && node dist/app.js",
+    "start": "cross-env NODE_ENV=production npm run undo:db && cross-env NODE_ENV=production npm run migrate:db && cross-env NODE_ENV=production npm run seed:db && cross-env NODE_ENV=production babel-node ./src/app.js",
     "dev": "node_modules/.bin/nodemon ./src/app.js --exec babel-node --s",
     "pre-test": "cross-env NODE_ENV=test npm run undo:db && cross-env NODE_ENV=test npm run migrate:db && cross-env NODE_ENV=test npm run seed:db",
     "test": "npm run pre-test && cross-env NODE_ENV=test nyc --reporter=text --reporter=html mocha --timeout=10000 --require @babel/polyfill --require @babel/register --exit ./src/test/index.test.js",
