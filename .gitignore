@@ -3,3 +3,4 @@ node_modules/
 package-lock.json
 .nyc_output
 coverage
+redis-4.0.9
