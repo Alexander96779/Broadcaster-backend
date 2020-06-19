@@ -19,7 +19,7 @@ before((done) => {
     .set('Accept', 'application/json')
     .send(user)
     .end(async (err, res) => {
-      const { token } = res.body.data;
+      const { token } = await res.body.data;
       token1 = token;
       done();
     });

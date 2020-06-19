@@ -25,28 +25,14 @@ export default class AuthenticationController {
    static async register(req, res) {
        try {
            const {
-               firstName,
-               lastName,
                userName,
                password,
                email
            } = req.body;
            const user = await User.create ( {
                user_name: userName,
-               firstName: firstName,
-               lastName: lastName,
                password: await hashPassword(password),
                email,
-           },
-           {
-            fields: [
-                'user_name',
-                'email',
-                'password',
-                'first_name',
-                'last_name',
-                'role'
-              ]
            });
 
            const newUser = {

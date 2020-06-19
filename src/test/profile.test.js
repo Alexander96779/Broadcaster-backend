@@ -26,7 +26,7 @@ before((done) => {
     .set('Accept', 'application/json')
     .send(user)
     .end(async (err, res) => {
-      const { token } = res.body.data;
+      const { token } = await res.body.data;
       token2 = token;
       await UserRepository.verify(user.email, { isVerified: true });
       done();
@@ -39,7 +39,7 @@ before((done) => {
       .set('Accept', 'application/json')
       .send(user1)
       .end(async (err, res) => {
-        const { token } = res.body.data;
+        const { token } = await res.body.data;
         token3 = token;
         done();
       });
