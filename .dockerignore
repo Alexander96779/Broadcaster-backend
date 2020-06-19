@@ -1,8 +1,0 @@
-node_modules
-README.md
-.bablerc
-.env.example
-.eslintrc.json
-.gitignore
-.sequelizerc
-.travis.yml
