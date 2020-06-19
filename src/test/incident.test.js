@@ -33,7 +33,7 @@ before((done) => {
           password: 'Kemmy123'
       })
       .end(async (err, res) => {
-        const { token } = res.body.data;
+        const { token } = await res.body.data;
         token2 = token;
         done();
       });
@@ -48,7 +48,7 @@ before((done) => {
           password: 'rehema123'
       })
       .end(async (err, res) => {
-        const { token } = res.body.data;
+        const { token } = await res.body.data;
         token3 = token;
         done();
       });
