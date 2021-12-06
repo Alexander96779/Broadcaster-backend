@@ -4,7 +4,6 @@ import UserSchema from '../modules/userSchema';
 import validator from '../utils/validator';
 import AuthUtils from '../utils/auth.utils';
 import userRepository from '../repositories/userRepository';
-import redisClient from '../database/redis.database';
 
 const { trimmer } = validator;
 
@@ -23,18 +22,12 @@ class AuthMiddleware {
     try {
       const token = (!req.headers.token) ? req.query.token : req.headers.token;
       const payload = AuthUtils.jwtVerify(token);
-      redisClient.get('token', (err, userToken) => {
         const user = userRepository.findByEmail(payload.email);
         if (!user) {
           return res.status(400).json({ status: 400, error: 'invalid token' });
         }
-        if (token === userToken) {
-          return res.status(401).json({ status: 401, error: 'Please login required' });
-        }
-
         req.userData = payload;
         next();
-      });
     } catch (ex) {
       return res.status(400).json({ status: 400, error: 'invalid token' });
     }

@@ -6,7 +6,7 @@ import Response from '../utils/response';
 import DbErrorHandler from '../utils/dbErrorHandler';
 import Mailer from '../services/mail/Mailer';
 import UserServices from '../services/user.service';
-import redisClient from '../database/redis.database';
+
 import UserRepository from '../repositories/userRepository';
 
 dotenv.config();
@@ -145,7 +145,6 @@ export default class AuthenticationController {
                 error: 'Provide token please!!',
             });
            }
-           redisClient.set('token', token);
            return res.status(200).json({
                status: 200,
                message: 'You have logged out',
