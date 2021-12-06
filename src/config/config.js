@@ -3,19 +3,18 @@ import { config } from 'dotenv';
 config();
 
 export default {
-  development: {
-    use_env_variable: 'DATABASE_URL_DEV',
-    dialect: 'postgres'
+
+  "development": {
+    "username": process.env.DATABASE_USERNAME,
+    "password": null,
+    "database": process.env.DATABASE_URL_DEV,
+    "host": "127.0.0.1",
+    "dialect": "mysql"
   },
-  test: {
-    use_env_variable: 'DATABASE_URL_TEST',
-    dialect: 'postgres',
-    logging: false
-  },
-  production: {
-    use_env_variable: 'DATABASE_URL',
-    dialect: 'postgres',
-    dialectOptions: {
+  "production": {
+    "use_env_variable": 'DATABASE_URL',
+    "dialect": 'postgres',
+    "dialectOptions": {
       ssl: { require: true, rejectUnauthorized: false },
     }
   }
