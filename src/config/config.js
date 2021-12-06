@@ -13,7 +13,7 @@ export default {
     logging: false
   },
   production: {
-    use_env_variable: 'DATABASE_URL_PROD',
+    use_env_variable: 'DATABASE_URL',
     dialect: 'postgres',
     dialectOptions: {
       ssl: { require: true, rejectUnauthorized: false },
